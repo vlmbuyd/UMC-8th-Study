@@ -21,6 +21,7 @@ export default function LoginPage() {
       <div className="flex flex-col gap-3">
         <input
           type="email"
+          name="email"
           className={`border border-[#ccc] w-[300px] p-[10px] focus:border-[#807bff] rounded-sm
                 ${
                   errors?.email && touched?.email
@@ -34,7 +35,8 @@ export default function LoginPage() {
           <div className="text-red-500 text-sm">{errors.email}</div>
         )}
         <input
-          type="email"
+          type="password"
+          name="password"
           className={`border border-[#ccc] w-[300px] p-[10px] focus:border-[#807bff] rounded-sm
             ${
               errors?.password && touched?.password
