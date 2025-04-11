@@ -1,15 +1,25 @@
+import { postSignin } from "../apis/auth";
+import { LOCAL_STORAGE_KEY } from "../constants/key";
 import useForm from "../hooks/useForm";
+import { useLocalStorage } from "../hooks/useLocalStorage";
 import { UserSigninInformation, validateSignin } from "../utils/validate";
 
 export default function LoginPage() {
+  const { setItem } = useLocalStorage(LOCAL_STORAGE_KEY.accessToken);
+
   const { values, errors, touched, getInputProps } =
     useForm<UserSigninInformation>({
       initialValue: { email: "", password: "" },
       validate: validateSignin,
     });
 
-  const handleSubmit = () => {
-    console.log(values);
+  const handleSubmit = async () => {
+    try {
+      const res = await postSignin(values);
+      setItem(res.data.accessToken);
+    } catch (error) {
+      alert((error as Error)?.message);
+    }
   };
 
   const isDisabled =

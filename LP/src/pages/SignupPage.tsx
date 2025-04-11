@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { postSignup } from "../apis/auth";
 
 const schema = z
   .object({
@@ -46,9 +47,11 @@ function SignupPage() {
     mode: "onBlur",
   });
 
-  const onSubmit: SubmitHandler<FormFields> = (data) => {
+  const onSubmit: SubmitHandler<FormFields> = async (data) => {
     const { passwordCheck, ...rest } = data;
-    console.log(rest);
+
+    const res = await postSignup(rest);
+    console.log(res);
   };
 
   return (
@@ -108,7 +111,7 @@ function SignupPage() {
           disabled={isSubmitting}
           className="w-full bg-blue-600 text-white py-3 rounded-md text-lg font-medium hover:bg-blue-700 transition-colors cursor-pointer disabled:bg-blue-300 disabled:cursor-not-allowed disabled:bg-gray-300"
         >
-          로그인
+          회원가입
         </button>
       </div>
     </div>
