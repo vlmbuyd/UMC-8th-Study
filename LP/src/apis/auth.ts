@@ -28,3 +28,9 @@ export const getMyInfo = async (): Promise<ResponseMyInfoDTO> => {
 
   return data;
 };
+
+export const postSignout = async () => {
+  const { data } = await axiosInstance.post("v1/auth/signout");
+
+  return data;
+};

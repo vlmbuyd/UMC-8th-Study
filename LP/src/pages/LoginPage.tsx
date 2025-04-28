@@ -1,11 +1,12 @@
-import { postSignin } from "../apis/auth";
-import { LOCAL_STORAGE_KEY } from "../constants/key";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import useForm from "../hooks/useForm";
-import { useLocalStorage } from "../hooks/useLocalStorage";
 import { UserSigninInformation, validateSignin } from "../utils/validate";
+import { useEffect } from "react";
 
 export default function LoginPage() {
-  const { setItem } = useLocalStorage(LOCAL_STORAGE_KEY.accessToken);
+  const { login, accessToken } = useAuth();
+  const navigate = useNavigate();
 
   const { values, errors, touched, getInputProps } =
     useForm<UserSigninInformation>({
@@ -13,12 +14,20 @@ export default function LoginPage() {
       validate: validateSignin,
     });
 
+  useEffect(() => {
+    if (accessToken) {
+      navigate("/");
+    }
+  }, [navigate, accessToken]);
+
   const handleSubmit = async () => {
-    try {
-      const res = await postSignin(values);
-      setItem(res.data.accessToken);
-    } catch (error) {
-      alert((error as Error)?.message);
+    const success = await login(values);
+
+    if (success) {
+      alert("로그인 성공");
+      navigate("/my");
+    } else {
+      alert("로그인 실패");
     }
   };
 
